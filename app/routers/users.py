@@ -20,8 +20,9 @@ def get_all_users():
 def create_user(user: UserScheme):
     with Session.begin() as session:
         try:
-            db_user = User(**user.create())
+            db_user = User(**user.__dict__)
             session.add(db_user)
+            print(db_user)
         except Exception:
             session.rollback()
             raise
