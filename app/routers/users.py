@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 from sqlalchemy import select
 
-from schemas.users import UserScheme
-from models.users import User
-from engine import Session
+from app.schemas.users import UserScheme
+from app.models.users import User
+from app.engine import Session
 
 router = APIRouter(
     prefix='/users',
@@ -20,10 +20,10 @@ def get_all_users():
 def create_user(user: UserScheme):
     with Session.begin() as session:
         try:
-            db_user = User(**user.__dict__)
+            db_user = User(**user.dict())
             session.add(db_user)
-            print(db_user)
+            print(db_user.__dict__)
         except Exception:
             session.rollback()
             raise
-    return user
+    return db_user.__dict__
